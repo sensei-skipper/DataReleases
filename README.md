@@ -1,6 +1,7 @@
 # DataReleases
 
-##"Snolab_binned_1" 
+## "Snolab_binned_1" 
+
 This folder contains images corresponding to the hidden (blinded) dataset from the Golden quadrant used in this publication: arxiv. The images are calibrated using the mean value of a single electrón in ADUs
 
 The images are contained in root files separated by exposure time (in seconds).

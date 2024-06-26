@@ -11,5 +11,10 @@ Inside the root files there is a tree:
 
 Where X corresponds to the column, Y to the row, ePix to the pixel charge after calibration. The mask corresponds to a binary code where each bit corresponds to a different mask. "1" indicates that a pixel was masked with the mask in that bit number. For example:
 
+256 + 4 = 260 In binary is: 0000000100000100. Which indicated that the pixel is masked by the Halo and Bleeding cuts.
 
-For the 1e analysis we used this cut to select the unmasked pixels: !(mask&0x967d). Other masks are executed during reconstraction but are either deprecated or not used in the 1-electron analysis. RunID corresponds to the internal image index number.
+For the 1e analysis we used this cut to select the unmasked pixels: !(mask&0x967d). 
+
+0x967d = 38525 = 1001011001111101. Which means that we only used the ...... masks.
+
+Other masks are executed during reconstraction but are either deprecated or not used in the 1-electron analysis. RunID corresponds to the internal image index number.

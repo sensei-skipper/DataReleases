@@ -17,15 +17,15 @@ For the 1e analysis, we implemented this cut to select the unmasked pixels: !(ma
 
 0x967d = 38525 = 1001011001111101. Which means that active masks are:
 
-1 pix cluster cut: if the pixel has a neighbour of >0.5e- (or epix > 0.5e-)
-Bleeding mask: if the pixel may be affected by CTI
-High-energy or Halo mask: if the pixel may be affected by High Energy Events
-Cross-talk: if the pixel may be affected by cross talk
-Noisy image: if the noise in the image baseline is too large
-Edge: if the pixel is near the edge of the CCD
-Bad pixel: if the pixel is in a pixel with an excess of single electron events, as analyzed over a certain dataset
-Bad Column:  if the pixel is in a column with an excess of single electron events, as analyzed over a certain dataset
-Noisy row: if the pixel is in a row with an excess of electornic noise
-ClusterShape: this doesn't have any impact in the 1-electron analysis since we selec 1 pixel events
+* 1 pix cluster cut: if the pixel has a neighbour of >0.5e- (or epix > 0.5e-)
+* Bleeding mask: if the pixel may be affected by CTI
+* High-energy or Halo mask: if the pixel may be affected by High Energy Events
+* Cross-talk: if the pixel may be affected by cross talk
+* Noisy row: if the electronic noise in the row too large.
+* Edge: if the pixel is near the edge of the CCD
+* Bad pixel: if the pixel is in a pixel with an excess of single electron events, as analyzed over a certain dataset
+* Bad Column:  if the pixel is in a column with an excess of single electron events, as analyzed over a certain dataset
+* Extended bleed mask: does not apply?
+* ClusterShape: this doesn't have any impact in the 1-electron analysis since we selec 1 pixel events
 
 Other masks are executed during reconstraction but are either deprecated or not used in the 1-electron analysis. 

@@ -29,3 +29,5 @@ For the 1e analysis, we implemented this cut to select the unmasked pixels: !(ma
 * ClusterShape: this doesn't have any impact in the 1-electron analysis since we selec 1 pixel events
 
 Other masks are executed during reconstraction but are either deprecated or not used in the 1-electron analysis. 
+
+$${\color{red} Add overscan information}$$

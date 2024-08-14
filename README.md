@@ -30,4 +30,4 @@ For the 1e analysis, we implemented this cut to select the unmasked pixels: !(ma
 
 Other masks are executed during reconstraction but are either deprecated or not used in the 1-electron analysis. 
 
-$${\color{red} Add overscan information}$$
+${\color{red} Add \space overscan \space information}$

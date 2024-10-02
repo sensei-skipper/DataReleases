@@ -30,4 +30,13 @@ For the 1e analysis, we implemented this cut to select the unmasked pixels: !(ma
 
 Other masks are executed during reconstraction but are either deprecated or not used in the 1-electron analysis. The images include an overscan of 128 columns and 4 rows.
 
-${\color{red} Add \space overscan \space information}$
+The macross plotRates.C draws the charge histograms for each exposure and fit the 1e- density to build the 1e- density vs exposure plot and extract de rate.
+
+Running ./plotRates.C creates this Canvas:
+
+![Plots](https://github.com/user-attachments/assets/c3090005-a487-411d-bd6c-bebd136b71db)
+
+With the histograms in the upper panel, and 1e density vs exposure at the bottom. It also outputs in the screen the number of masked and unmasked pixels for each exposure and the fittes 1e rate:
+
+![screeoutput](https://github.com/user-attachments/assets/7c483dfb-5f44-4740-bc90-92b2715440eb)
+

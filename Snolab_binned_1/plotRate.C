@@ -19,31 +19,32 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
 
     TFile* file = TFile::Open(fileName);
 
-    TTree *tree = (TTree*)file->Get("calPixTree");//38525
+    TTree *tree = (TTree*)file->Get("calPixTree");
     int maskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
     int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
-    cout << "Masked Pixels: " << maskedPixels << " | All Pixels: " << allPixels << endl;
-    TH1F* histoTMP = (TH1F*) gROOT->FindObject("histoUnmaskedTMP");
-    histoTMP->Fit(doubleGaus,"QL0","",-1.0,1.5);
+
+    cout << "Masked Pixels: " << maskedPixels << " | All Pixels in active area: " << allPixels << endl;
+    TH1F* histo = (TH1F*) gROOT->FindObject("histoUnmaskedTMP");
+    histo->Fit(doubleGaus,"QL0","",-1.0,1.5);
 
     density.push_back(doubleGaus->GetParameter(4));
     densityError.push_back(doubleGaus->GetParError(4));
 
-    // Change the binning only for visualization
-
-    tree->Draw("ePix>>histo(100,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
-    TH1F* histo = (TH1F*) gROOT->FindObject("histo");
+    // Change the binning and normalize only for visualization
 
     histo->SetTitle("");
-    doubleGaus->SetParameter(3, doubleGaus->GetParameter(3)/maskedPixels*400.0/100.0);
-    doubleGaus->SetLineColor(color);
     histo->SetLineColor(color);
     histo->SetLineStyle(lineStyle);
     histo->SetLineWidth(2);
     histo->GetXaxis()->SetTitle("Electrons");
-    histo->GetXaxis()->SetRangeUser(-0.95,1.55);
     histo->GetYaxis()->SetTitle("Counts");
+
+    histo->Rebin(4);
+    histo->GetXaxis()->SetRangeUser(-0.95,1.55);
     histo->DrawNormalized(options);
+
+    doubleGaus->SetParameter(3, doubleGaus->GetParameter(3)/maskedPixels*4.0);
+    doubleGaus->SetLineColor(color);
     doubleGaus->Draw("SAME");
 
 

@@ -38,5 +38,6 @@ Running ./plotRates.C creates this Canvas:
 
 With the histograms in the upper panel, and 1e density vs exposure at the bottom. It also outputs in the screen the number of masked and unmasked pixels for each exposure and the fittes 1e rate:
 
-![screeoutput](https://github.com/user-attachments/assets/7c483dfb-5f44-4740-bc90-92b2715440eb)
+![image](https://github.com/user-attachments/assets/8d31888e-ac7c-4698-aa12-7d510830458a)
+
 

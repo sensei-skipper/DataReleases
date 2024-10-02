@@ -1,5 +1,6 @@
 void getDensity(TString fileName, int color, int lineStyle, vector<double> &density, vector<double> &densityError, TString options=""){
 
+    ROOT::Math::MinimizerOptions::SetDefaultMinimizer("Minuit2","Migrad");
     TF1* doubleGaus = new TF1("doubleGaus", "(1.0-[4])*[3]*(TMath::Gaus(x,[0],[1]*[2],1)) + [4]*[3]*(TMath::Gaus(x,[0]+[1],[1]*[2],1))");
     doubleGaus->FixParameter(0,0.0);
     doubleGaus->FixParameter(1,1.0);
@@ -14,9 +15,8 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
 
     TFile* file = TFile::Open(fileName);
 
-    TTree *tree = (TTree*)file->Get("calPixTree");
-    int maskedPixels = tree->Draw("ePix>>histo", "x<3072&&y<16&&!(mask&0x967d)", options);
-    //tree->Draw("ePix>>histo", "!(mask&0x967d)", options);
+    TTree *tree = (TTree*)file->Get("calPixTree");//38525
+    int maskedPixels = tree->Draw("ePix>>histo(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", options);
     TH1F* histo = (TH1F*) gROOT->FindObject("histo");
     doubleGaus->SetLineColor(color);
     histo->Fit(doubleGaus,"QSL","",-0.5,1.5);//Fit(fitToy,"QL","",-1.0,2.0);
@@ -28,8 +28,8 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
     density.push_back(doubleGaus->GetParameter(4));
     densityError.push_back(doubleGaus->GetParError(4));
 
-    int unmaskedPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
-    cout << "Masked Pixels: " << maskedPixels << " | Unmasked Pixels: " << unmaskedPixels << endl;
+    int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
+    cout << "Masked Pixels: " << maskedPixels << " | All Pixels: " << allPixels << endl;
 
 }
 
@@ -48,7 +48,6 @@ void plotRate(){
 
     TPad *p1 = (TPad *)(canvas->cd(1));
     p1->SetLogy();
-
 
 
     cout << "****************** 0 HS ********************" << endl;
@@ -95,8 +94,11 @@ void plotRate(){
 
     gr->GetXaxis()->SetTitle("Exposure / days");
     gr->GetYaxis()->SetTitle("1e density (electrons/superpix)");
+    TString form;
 
-    cout << "1e Rate: (" << pol1->GetParameter(1) / 32.0 << " +/- " << pol1->GetParError(1) / 32.0  << ") e-/pix/day" << endl;
+    cout << Form("exp-indep: (%.2f +/- %.2f) 10^(-5) e-/superpix/image", pol1->GetParameter(0)*pow(10,5),  pol1->GetParError(0) *pow(10,5)) << endl;
+    cout << Form("exp-dep: (%.2f +/- %.2f) 10^(-4) e-/superpix/day", pol1->GetParameter(1)*pow(10,4),  pol1->GetParError(1) *pow(10,4)) << endl;
+    cout << Form("1e- Rate: (%.2f +/- %.2f) 10^(-5) e-/pix/day", pol1->GetParameter(1)/32*pow(10,5),  pol1->GetParError(1)/32 *pow(10,5)) << endl;
     cout << "--------------------------------------------" << endl;
 
 

@@ -34,11 +34,13 @@ The macross plotRates.C draws the charge histograms for each exposure and fit th
 
 Running ./plotRates.C creates this Canvas:
 
-![image](https://github.com/user-attachments/assets/81c8239b-04ef-4d90-9b44-0e953b73c55d)
+![image](https://github.com/user-attachments/assets/3521f902-d15a-4e4f-99c0-86c7b118baa9)
+
 
 
 With the histograms in the upper panel, and 1e density vs exposure at the bottom. It also outputs in the screen the number of masked and unmasked pixels for each exposure and the fittes 1e rate:
 
-![image](https://github.com/user-attachments/assets/8d31888e-ac7c-4698-aa12-7d510830458a)
+![image](https://github.com/user-attachments/assets/9c3a9b55-ce33-403b-8e21-41525c8b7805)
+
 
 

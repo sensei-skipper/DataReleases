@@ -18,12 +18,15 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
     TTree *tree = (TTree*)file->Get("calPixTree");//38525
     int maskedPixels = tree->Draw("ePix>>histo(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", options);
     TH1F* histo = (TH1F*) gROOT->FindObject("histo");
+    histo->SetTitle("");
+
     doubleGaus->SetLineColor(color);
     histo->Fit(doubleGaus,"QSL","",-0.5,1.5);//Fit(fitToy,"QL","",-1.0,2.0);
     histo->SetLineColor(color);
     histo->SetLineStyle(lineStyle);
     histo->SetLineWidth(2);
     histo->GetXaxis()->SetTitle("Electrons");
+    histo->GetXaxis()->SetRangeUser(-0.95,1.55);
     histo->GetYaxis()->SetTitle("Counts");
     density.push_back(doubleGaus->GetParameter(4));
     densityError.push_back(doubleGaus->GetParError(4));
@@ -41,7 +44,7 @@ void plotRate(){
     vector<double> exp;
     vector<double> expError;
 
-    TCanvas *canvas = new TCanvas("c1", "c1",10,59,800,1500);
+    TCanvas *canvas = new TCanvas("c1", "c1",10,59,800,1300);
     gStyle->SetOptStat(0);
     canvas->Divide(1,2);
 
@@ -94,6 +97,7 @@ void plotRate(){
 
     gr->GetXaxis()->SetTitle("Exposure / days");
     gr->GetYaxis()->SetTitle("1e density (electrons/superpix)");
+    gr->SetTitle("");
     TString form;
 
     cout << Form("exp-indep: (%.2f +/- %.2f) 10^(-5) e-/superpix/image", pol1->GetParameter(0)*pow(10,5),  pol1->GetParError(0) *pow(10,5)) << endl;

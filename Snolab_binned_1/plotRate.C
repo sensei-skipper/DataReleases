@@ -1,7 +1,10 @@
 void getDensity(TString fileName, int color, int lineStyle, vector<double> &density, vector<double> &densityError, TString options=""){
 
+
+    //Small differences in the fits may happen ROOT to ROOT
+
     ROOT::Math::MinimizerOptions::SetDefaultMinimizer("Minuit2","Migrad");
-    TF1* doubleGaus = new TF1("doubleGaus", "(1.0-[4])*[3]*(TMath::Gaus(x,[0],[1]*[2],1)) + [4]*[3]*(TMath::Gaus(x,[0]+[1],[1]*[2],1))");
+    TF1* doubleGaus = new TF1("doubleGaus", "(1.0-[4])*[3]*(TMath::Gaus(x,[0],[1]*[2],1)) + [4]*[3]*(TMath::Gaus(x,[0]+[1],[1]*[2],1))",-0.5,1.5);
     doubleGaus->FixParameter(0,0.0);
     doubleGaus->FixParameter(1,1.0);
     doubleGaus->SetParameter(2, 0.2);
@@ -12,27 +15,37 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
     doubleGaus->SetParName(3,"norm");
     doubleGaus->SetParName(4,"mu");
 
+    //Open the file and fit the charge histogram to get the 1e density
 
     TFile* file = TFile::Open(fileName);
 
     TTree *tree = (TTree*)file->Get("calPixTree");//38525
-    int maskedPixels = tree->Draw("ePix>>histo(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", options);
-    TH1F* histo = (TH1F*) gROOT->FindObject("histo");
-    histo->SetTitle("");
+    int maskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
+    int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
+    cout << "Masked Pixels: " << maskedPixels << " | All Pixels: " << allPixels << endl;
+    TH1F* histoTMP = (TH1F*) gROOT->FindObject("histoUnmaskedTMP");
+    histoTMP->Fit(doubleGaus,"QL0","",-1.0,1.5);
 
+    density.push_back(doubleGaus->GetParameter(4));
+    densityError.push_back(doubleGaus->GetParError(4));
+
+    // Change the binning only for visualization
+
+    tree->Draw("ePix>>histo(100,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
+    TH1F* histo = (TH1F*) gROOT->FindObject("histo");
+
+    histo->SetTitle("");
+    doubleGaus->SetParameter(3, doubleGaus->GetParameter(3)/maskedPixels*400.0/100.0);
     doubleGaus->SetLineColor(color);
-    histo->Fit(doubleGaus,"QSL","",-0.5,1.5);//Fit(fitToy,"QL","",-1.0,2.0);
     histo->SetLineColor(color);
     histo->SetLineStyle(lineStyle);
     histo->SetLineWidth(2);
     histo->GetXaxis()->SetTitle("Electrons");
     histo->GetXaxis()->SetRangeUser(-0.95,1.55);
     histo->GetYaxis()->SetTitle("Counts");
-    density.push_back(doubleGaus->GetParameter(4));
-    densityError.push_back(doubleGaus->GetParError(4));
+    histo->DrawNormalized(options);
+    doubleGaus->Draw("SAME");
 
-    int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
-    cout << "Masked Pixels: " << maskedPixels << " | All Pixels: " << allPixels << endl;
 
 }
 
@@ -101,8 +114,8 @@ void plotRate(){
     TString form;
 
     cout << Form("exp-indep: (%.2f +/- %.2f) 10^(-5) e-/superpix/image", pol1->GetParameter(0)*pow(10,5),  pol1->GetParError(0) *pow(10,5)) << endl;
-    cout << Form("exp-dep: (%.2f +/- %.2f) 10^(-4) e-/superpix/day", pol1->GetParameter(1)*pow(10,4),  pol1->GetParError(1) *pow(10,4)) << endl;
-    cout << Form("1e- Rate: (%.2f +/- %.2f) 10^(-5) e-/pix/day", pol1->GetParameter(1)/32*pow(10,5),  pol1->GetParError(1)/32 *pow(10,5)) << endl;
+    cout << Form("exp-dep:   (%.2f +/- %.2f) 10^(-4) e-/superpix/day", pol1->GetParameter(1)*pow(10,4),  pol1->GetParError(1) *pow(10,4)) << endl;
+    cout << Form("1e- Rate:  (%.2f +/- %.2f) 10^(-5) e-/pix/day", pol1->GetParameter(1)/32*pow(10,5),  pol1->GetParError(1)/32 *pow(10,5)) << endl;
     cout << "--------------------------------------------" << endl;
 
 

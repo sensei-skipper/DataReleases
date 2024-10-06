@@ -20,10 +20,10 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
     TFile* file = TFile::Open(fileName);
 
     TTree *tree = (TTree*)file->Get("calPixTree");
-    int maskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
+    int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
     int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
 
-    cout << "Masked Pixels: " << maskedPixels << " | All Pixels in active area: " << allPixels << endl;
+    cout << "Unmasked Pixels: " << unMaskedPixels << " | All Pixels in active area: " << allPixels << endl;
     TH1F* histo = (TH1F*) gROOT->FindObject("histoUnmaskedTMP");
     histo->Fit(doubleGaus,"QL0","",-1.0,1.5);
 
@@ -43,7 +43,7 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
     histo->GetXaxis()->SetRangeUser(-0.95,1.55);
     histo->DrawNormalized(options);
 
-    doubleGaus->SetParameter(3, doubleGaus->GetParameter(3)/maskedPixels*4.0);
+    doubleGaus->SetParameter(3, doubleGaus->GetParameter(3)/unMaskedPixels*4.0);
     doubleGaus->SetLineColor(color);
     doubleGaus->Draw("SAME");
 

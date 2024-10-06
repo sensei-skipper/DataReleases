@@ -1,4 +1,4 @@
-void getDensity(TString fileName, int color, int lineStyle, vector<double> &density, vector<double> &densityError, TString options=""){
+void getDensity(TString fileName, int color, int lineStyle, double exposureSec, vector<double> &exposure, vector<double> &exposureError, vector<double> &density, vector<double> &densityError, TString options=""){
 
 
     //Small differences in the fits may happen ROOT to ROOT
@@ -21,9 +21,11 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
 
     TTree *tree = (TTree*)file->Get("calPixTree");
     int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
-    int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y<16","goff");
+    int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y>0&&y<=16","goff");
 
     cout << "Unmasked Pixels: " << unMaskedPixels << " | All Pixels in active area: " << allPixels << endl;
+
+
     TH1F* histo = (TH1F*) gROOT->FindObject("histoUnmaskedTMP");
     histo->Fit(doubleGaus,"QL0","",-1.0,1.5);
 
@@ -43,9 +45,22 @@ void getDensity(TString fileName, int color, int lineStyle, vector<double> &dens
     histo->GetXaxis()->SetRangeUser(-0.95,1.55);
     histo->DrawNormalized(options);
 
+    //Normalize fit
     doubleGaus->SetParameter(3, doubleGaus->GetParameter(3)/unMaskedPixels*4.0);
     doubleGaus->SetLineColor(color);
     doubleGaus->Draw("SAME");
+
+    //Calculate exposure
+
+    // Image read out time is 16m 5s = 965s
+    // Row readout time is 965/20
+    // Number of columns is 3200
+
+    TString exposureFormula = Form("(%f+%f*(y + x/%f))>>histoExp", exposureSec, 965.0/20.0/3600/24, 3200.);
+    tree->Draw(exposureFormula, "y>0&&y<=16&&!(mask&0x967d)", "goff");
+    TH1F* histoExp = (TH1F*) gROOT->FindObject("histoExp");
+    exposure.push_back(histoExp->GetMean());
+    exposureError.push_back(histoExp->GetStdDev());
 
 
 }
@@ -68,32 +83,23 @@ void plotRate(){
 
 
     cout << "****************** 0 HS ********************" << endl;
-    getDensity("./RELEASE_hits_blinded_EXP0_13.root", kGreen+2, 1, density, densityError);
-    exp.push_back(0.00501457);
-    expError.push_back(0.00257678);
+    getDensity("./RELEASE_hits_blinded_EXP0_13.root", kGreen+2, 1, 0.0, exp, expError, density, densityError);
     canvas->Update();
 
 
     cout << "****************** 2 HS ********************" << endl;
-    getDensity("./RELEASE_hits_blinded_EXP7200_13.root", kRed+2, 9, density, densityError, "SAME");
-    exp.push_back(0.0883767);
-    expError.push_back(0.00257516);
+    getDensity("./RELEASE_hits_blinded_EXP7200_13.root", kRed+2, 9, 7200.0/3600.0/24.0, exp, expError, density, densityError, "SAME");
     canvas->Update();
 
 
     cout << "****************** 6 HS ********************" << endl;
-    getDensity("./RELEASE_hits_blinded_EXP21600_13.root", kBlue, 2, density, densityError, "SAME");
-    exp.push_back(0.255046);
-    expError.push_back(0.00257655);
+    getDensity("./RELEASE_hits_blinded_EXP21600_13.root", kBlue, 2, 21600.0/3600.0/24.0, exp, expError, density, densityError, "SAME");
     canvas->Update();
 
 
     cout << "****************** 20 HS *******************" << endl;
-    getDensity("./RELEASE_hits_blinded_EXP72000_13.root", kBlack, 3, density, densityError, "SAME");
-    exp.push_back(0.838429);
-    expError.push_back(0.00259149);
+    getDensity("./RELEASE_hits_blinded_EXP72000_13.root", kBlack, 3, 72000.0/3600.0/24.0, exp, expError, density, densityError, "SAME");
     canvas->Update();
-    //legend->Draw();
 
     cout << "--------------------------------------------" << endl;
     canvas->cd(2);
@@ -112,8 +118,8 @@ void plotRate(){
     gr->GetXaxis()->SetTitle("Exposure / days");
     gr->GetYaxis()->SetTitle("1e density (electrons/superpix)");
     gr->SetTitle("");
-    TString form;
 
+    TString form;
     cout << Form("exp-indep: (%.2f +/- %.2f) 10^(-5) e-/superpix/image", pol1->GetParameter(0)*pow(10,5),  pol1->GetParError(0) *pow(10,5)) << endl;
     cout << Form("exp-dep:   (%.2f +/- %.2f) 10^(-4) e-/superpix/day", pol1->GetParameter(1)*pow(10,4),  pol1->GetParError(1) *pow(10,4)) << endl;
     cout << Form("1e- Rate:  (%.2f +/- %.2f) 10^(-5) e-/pix/day", pol1->GetParameter(1)/32*pow(10,5),  pol1->GetParError(1)/32 *pow(10,5)) << endl;

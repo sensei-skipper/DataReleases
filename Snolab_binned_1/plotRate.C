@@ -70,28 +70,28 @@ void plotRate(){
     cout << "****************** 0 HS ********************" << endl;
     getDensity("./RELEASE_hits_blinded_EXP0_13.root", kGreen+2, 1, density, densityError);
     exp.push_back(0.00501457);
-    expError.push_back(0);
+    expError.push_back(0.00257678);
     canvas->Update();
 
 
     cout << "****************** 2 HS ********************" << endl;
     getDensity("./RELEASE_hits_blinded_EXP7200_13.root", kRed+2, 9, density, densityError, "SAME");
     exp.push_back(0.0883767);
-    expError.push_back(0);
+    expError.push_back(0.00257516);
     canvas->Update();
 
 
     cout << "****************** 6 HS ********************" << endl;
     getDensity("./RELEASE_hits_blinded_EXP21600_13.root", kBlue, 2, density, densityError, "SAME");
     exp.push_back(0.255046);
-    expError.push_back(0);
+    expError.push_back(0.00257655);
     canvas->Update();
 
 
     cout << "****************** 20 HS *******************" << endl;
     getDensity("./RELEASE_hits_blinded_EXP72000_13.root", kBlack, 3, density, densityError, "SAME");
     exp.push_back(0.838429);
-    expError.push_back(0);
+    expError.push_back(0.00259149);
     canvas->Update();
     //legend->Draw();
 

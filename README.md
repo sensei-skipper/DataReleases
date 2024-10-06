@@ -37,7 +37,8 @@ Running ./plotRates.C creates this Canvas:
 
 The charge histograms are in the top panel, and the 1e density vs exposure is in the bottom. It also outputs in the screen the number of masked and unmasked pixels for each exposure and fits the 1e rate:
 
-![image](https://github.com/user-attachments/assets/2fc0e709-c6d8-49d6-b52e-dd1985ae317b)
+<img src="https://github.com/user-attachments/assets/9cf8b46a-6d88-4ae5-a74c-99d9e87ac2ee" width="400">
+
 
 
 

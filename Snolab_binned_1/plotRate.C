@@ -20,7 +20,7 @@ void getDensity(TString fileName, int color, int lineStyle, double exposureSec, 
     TFile* file = TFile::Open(fileName);
 
     TTree *tree = (TTree*)file->Get("calPixTree");
-    int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x967d)", "goff");
+    int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x067d)", "goff");
     int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y>0&&y<=16","goff");
 
     cout << "Unmasked Pixels: " << unMaskedPixels << " | All Pixels in active area: " << allPixels << endl;
@@ -57,7 +57,7 @@ void getDensity(TString fileName, int color, int lineStyle, double exposureSec, 
     // Number of columns is 3200
 
     TString exposureFormula = Form("(%f+%f*(y + x/%f))>>histoExp", exposureSec, 965.0/20.0/3600/24, 3200.);
-    tree->Draw(exposureFormula, "y>0&&y<=16&&!(mask&0x967d)", "goff");
+    tree->Draw(exposureFormula, "y>0&&y<=16&&!(mask&0x067d)", "goff");
     TH1F* histoExp = (TH1F*) gROOT->FindObject("histoExp");
     exposure.push_back(histoExp->GetMean());
     exposureError.push_back(histoExp->GetStdDev());

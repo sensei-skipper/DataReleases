@@ -10,9 +10,9 @@ ROOT files contain images separated by exposure time (in seconds). Inside each f
 
 X corresponds to the column, Y to the row, ePix to the superpixel charge after calibration, and RunID to the internal image index. The mask contains a binary code where each bit corresponds to a different mask. A "1"-bit indicates that a superpixel is masked with the mask assigned to the bit number. 
 
-For the 1e analysis, we implemented this cut to select the unmasked pixels: !(mask&0x967d). Where:
+For the 1e analysis, we implemented this cut to select the unmasked pixels: !(mask&0x067d). Where:
 
-0x967d = 38525 = 1001011001111101, meaning that active masks are:
+0x067d = 1661 = 0000011001111101, meaning that active masks are:
 
 * 1-pix cluster cut: if the superpixel has a neighbor of >0.5e- (or epix > 0.5e-)
 * Bleeding mask: if the superpixel may be affected by CTI
@@ -22,8 +22,6 @@ For the 1e analysis, we implemented this cut to select the unmasked pixels: !(ma
 * Edge: if the superpixel is near the edge of the CCD
 * Bad pixel: if the superpixel is in a pixel with an excess of single electron events, as analyzed over the commissioning dataset
 * Bad Column:  if the superpixel is in a column with an excess of single electron events, as analyzed over the commissioning dataset
-* Extended bleed mask: similar to hot columns but calculated only over bleed zones.
-* ClusterShape: this doesn't have any impact in the 1-electron analysis since we select 1-superpixel events
 
 Other masks are executed during reconstructionn but are either deprecated or not used in the 1-electron analysis. The images include an overscan of 128 columns and 4 rows.
 

@@ -21,7 +21,7 @@ void getDensity(TString fileName, int color, int lineStyle, double exposureSec, 
 
     TTree *tree = (TTree*)file->Get("calPixTree");
     int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x067d)", "goff");
-    int allPixels = tree->Draw("ePix>>histoTMP", "x<3072&&y>0&&y<=16","goff");
+    int allPixels = 3072*16;
 
     cout << "Unmasked Pixels: " << unMaskedPixels << " | All Pixels in active area: " << allPixels << endl;
 

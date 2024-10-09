@@ -11,7 +11,7 @@ ROOT files contain images separated by exposure time (in seconds). Inside each f
 X corresponds to the column, Y to the row, ePix to the superpixel charge after calibration, and RunID to the internal image index. The mask contains a binary code where each bit corresponds to a different mask. A "1"-bit indicates that a superpixel is masked with the mask assigned to the bit number. 
 
 For the 1e analysis, we implemented this cut to select the unmasked pixels: !(mask&0x067d). Where:
-
+bleedXEdges
 0x067d = 1661 = 0000011001111101, meaning that active masks are:
 
 * 1-pix cluster cut: if the superpixel has a neighbor of >0.5e- (or epix > 0.5e-)
@@ -38,6 +38,6 @@ The charge histograms are in the top panel, and the 1e density vs exposure is in
 <img src="https://github.com/user-attachments/assets/9cf8b46a-6d88-4ae5-a74c-99d9e87ac2ee" width="400">
 
 
-
+Note: ROOT files where created with version ROOT 6.28/06. You may see error messages if you are running an older version: https://root-forum.cern.ch/t/error-in-tlist-clear-a-list-is-accessing-an-object-already-deleted-list-name-tlist-when-opening-a-file-created-by-root-6-30-using-root-6-14-09/57588
 
 

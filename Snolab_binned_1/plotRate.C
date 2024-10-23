@@ -20,7 +20,7 @@ void getDensity(TString fileName, int color, int lineStyle, double exposureSec, 
     TFile* file = TFile::Open(fileName);
 
     TTree *tree = (TTree*)file->Get("calPixTree");
-    int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.3,2.7)", "y>0&&y<=16&&!(mask&0x067d)", "goff");
+    int unMaskedPixels = tree->Draw("ePix>>histoUnmaskedTMP(400,-1.0,1.6)", "y>0&&y<=16&&!(mask&0x067d)", "goff");
     float nroImages = tree->GetEntries()/(3200*20);
     float allPixels = nroImages*3072*16;
 

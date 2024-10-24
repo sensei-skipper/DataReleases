@@ -11,7 +11,7 @@ ROOT files contain images separated by exposure time (in seconds). Inside each f
 X corresponds to the column, Y to the row, ePix to the superpixel charge after calibration, and RunID to the internal image index. LTANAME and OHDU correspond to the CCD and quadrant ids. The mask contains a binary code where each bit corresponds to a different mask. A "1"-bit indicates that a superpixel is masked with the mask assigned to the bit number. 
 
 For the 1e analysis, we implemented this cut to select the unmasked pixels: !(mask&0x067d). Where:
-bleedXEdges
+
 0x067d = 1661 = 0000011001111101, meaning that active masks are:
 
 * 1-pix cluster cut: if the superpixel has a neighbor of >0.5e- (or epix > 0.5e-)

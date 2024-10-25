@@ -2,7 +2,7 @@
 
 ## "Snolab_binned_1" 
 
-This folder contains images corresponding to the hidden (blinded) dataset from the Golden quadrant used in this publication: link to the paper. We calibrate the images using the mean value of a single electron in ADUs
+This folder contains images corresponding to the hidden (blinded) dataset from the Golden quadrant used in [this publication](https://arxiv.org/abs/2410.18716). We calibrate the images using the mean value of a single electron in ADUs
 
 ROOT files contain images separated by exposure time (in seconds). Inside each file, there is a tree:
 

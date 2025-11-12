@@ -1,6 +1,10 @@
-# Data Dictionary — `SENSEI_modulation_data.xlsx`
+# Data Dictionary — `SENSEI_diurnal_modulation_data.csv`
 
-**Format:** CSV (.csv).
+**This repository contains the processed dataset used in the SENSEI daily-modulation paper.**  
+The data are provided in `data.csv` and correspond to the **processed** (post-masking) sample, as defined and motivated in the **“Data Reconstruction & Selection”** section of the manuscript.  
+Preprint: [arXiv:2510.20889](https://arxiv.org/pdf/2510.20889)
+
+**Format:** CSV (.csv).  
 **Sheet:** `Sheet1`.  
 **Granularity:** One row per image / data point.
 

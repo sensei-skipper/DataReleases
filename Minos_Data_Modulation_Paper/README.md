@@ -3,7 +3,7 @@
 **This repository contains the processed dataset used in the SENSEI daily-modulation paper.**  
 The data are provided in `data.csv` and correspond to the **processed** (post-masking) sample, as defined and motivated in the **“Data Reconstruction & Selection”** section of the manuscript.  
 Preprint: [arXiv:2510.20889](https://arxiv.org/pdf/2510.20889)  
-Data DOI (Zenodo): [10.5281/zenodo.17590389](https://doi.org/10.5281/zenodo.17590389)
+Data DOI (Zenodo): [10.5281/zenodo.17611806](https://doi.org/10.5281/zenodo.17611806)
 
 **Format:** CSV (.csv).  
 **Sheet:** `Sheet1`.  
